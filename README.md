@@ -3,6 +3,22 @@
 Реализация задания HFT-трека CMF: backtester исторических L2-данных с
 семействами стратегий Avellaneda–Stoikov (2008) и его 2018 microprice-расширения.
 
+![Equity curve on sample dataset](docs/equity_curve.png)
+
+Sample-прогон (5 000 LOB-снапшотов, 20 000 трейдов):
+
+| Strategy | total_pnl | max_drawdown | Calmar | Sharpe / step | Fill rate | Final inv |
+|---|---:|---:|---:|---:|---:|---:|
+| Naive baseline       | -0.00011 | 0.01011 | -0.011 | -2.4e-5 | 0.055% | **100** |
+| Avellaneda–Stoikov 2008  |  0.00215 | 0.00030 |  **7.13** | 0.053 | 1.38% | 0 |
+| Avellaneda–Stoikov 2018  |  0.00215 | 0.00030 |  **7.13** | 0.053 | 1.38% | 0 |
+
+Avellaneda–Stoikov удерживает inventory в пределах ±2 и даёт положительный PnL
+при Calmar ≈ 7.1 -- naive baseline накапливает позицию 100 и заканчивает с
+крупным просадом. На sample-сете AS-2008 и AS-2018 (microprice) численно
+совпадают; различие проявляется на полном датасете при большей дисперсии
+queue-imbalance (см. `notebooks/analysis.ipynb`).
+
 Ключевые моменты:
 
 - **C++20**, статическая сборка, без внешних рантайм-зависимостей кроме pthread.
